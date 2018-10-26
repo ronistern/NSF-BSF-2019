@@ -1,0 +1,78 @@
+%%%%%%%%%%% BSF GUIDELINES FOR ABSTRACT FILE %%%%%%%%%%%%
+%This file should include the word 'Abstract' at the top. The following information should be included: the full title of the proposed application, which should be brief, meaningful and suitable for use in the general media; the application number supplied by the system; and the names and affiliations of the principal investigators.
+%
+%An abstract of the proposed research of 250 words or less is required. If a grant is awarded, the abstract may be sent to science information exchange centers and become available to the public. The abstract should be informative to scientists in the same or related fields. A statement of the project's potential contribution to the research done in that field should be included.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\documentclass[12pt]{article}
+
+\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
+
+\usepackage{times}
+\usepackage{anysize}
+\marginsize{2cm}{2cm}{2cm}{3cm}
+%\onehalfspace
+%\doublespace
+\setlength{\parindent}{0.8cm}
+%\setlength{\parskip}{0.2\baselineskip}
+%\setlength{\topmargin}{2cm}
+%\setlength{\textheight}{25cm}
+%\setlength{\textwidth}{14cm}
+%\setlength{\oddsidemargin}{2cm}
+%\setlength{\evensidemargin}{2cm}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+
+%\linespread{1}
+
+\lhead{Data-and-Model Driven Reasoning} \rhead{R. Stern and B. Juba}
+\cfoot{\thepage} 
+%\cfoot{} 
+\pagenumbering{arabic}
+%\pagenumbering{Roman}
+
+\begin{document}
+
+
+\title{\large{Abstract: BSF Application No. 2017736, NSF Application No. 1815220}\\
+\Large{Data-and-Model Driven Reasoning}}
+%, BSF Application No. 2016141}}
+\date{\vspace{-0.5cm}}
+%\author{Roni Stern \\ Software and Information Systems Eng., Ben Gurion University of the Negev        \and Brendan Juba \\ Computer Science, Washington University in St. Louis}
+\author{Roni Stern, Ben Gurion University of the Negev \and Brendan Juba, Washington University in St. Louis}
+\maketitle
+\section*{Data-and-Model Driven Reasoning}
+
+
+% There are two main approached: model-based and data-drive 
+%Automated planning and automated diagnosis (DX) are long term goals of Artificial Intelligence (AI) research, with many practical applications. Model-based algorithms for these problems assume a model of the world is given and {\bf reasons} about it. Data-driven algorithms builds on the growing availability of data and {\bf learns} from it how to handle future events. For example, classical planning algorithms employ a model-based approach through the well-known ``frame axioms'' assumed by STRIPS planners. In contrast, popular reinforcement learning algorithms do not even try to model the environment, and learn directly how to act. Both approaches -- model-based and data-driven -- have pros and cons and are popular in different contexts. 
+
+
+% We aim for the middle ground
+% Our goal: when to use which and why We propose to develop a data-and-model driven approach for solving planning problems and diagnosis problems, that uses both sources of information (model and observations) in a principled way. This includes laying the theoretical foundation for properly To this end we will study the assumptions re This data-and-model driven approach will enjoy the complementary benefits of model-based and data-driven techniques, and we will demonstrate this by developing effective planing and diagnosis algorithms. 
+
+
+
+
+
+% There are two main approached: model-based and data-drive 
+Research in Artificial Intelligence is torn between two general approaches: the traditional AI approach that assumes a model of the world is given and {\bf reasons} about it, and the data-driven  approach that builds on the growing availability of data and {\bf learns} from it how to handle future events. For example, classical planning algorithms employ a model-based approach, representing the world with a planning domain description language and assuming the well-known ``frame axioms''. In contrast, popular reinforcement learning algorithms do not even try to model the environment, and learn directly how to act. Both approaches -- model-based and data-driven -- have pros and cons: model-based methods provide strong quality and success guarantees but are often computationally expensive and require a model, while data-driven methods are often fast and model-free but lack solution quality guarantees and may require much data to be effective. 
+ 
+%model-based methods are used when a reliable model of the world is given while data-driven methods are usually used when observations of past activities are given instead of such a model. 
+
+
+% We aim for the middle ground
+% Our goal: when to use which and why
+In the proposed research we will explore how model-based and data-driven approaches can augment each other in the broad range of settings where both models and observations are available. Our objective is to {\bf develop a data-and-model driven approach} for two important and well-studied problems: automated planning and automated diagnosis. This includes a theory of the potential use of a model and past observations, as well as practical state-of-the-art planning algorithms and diagnosis algorithms that enjoy the complementary benefits of data-driven and model-based approaches. 
+
+
+%In the proposed research we will explore how model-based and data-driven approaches can augment each other in the broad range of settings where both model and observations are available. We explore these model-and-observation settings for two important and well-studied problems: automated planning and automated diagnosis. Our objective is to developed planning algorithms and diagnosis algorithms that enjoy the complimentary benefits of the model-based and the data-driven approaches, and use both sources of information in a principled way. 
+
+\paragraph{Intellectual Merit} The project will lay theoretical foundations for our data-and-model driven approach that will allow us to address fundamental questions such as what assumptions are needed for generalization and transfer; how much data is needed in a given context; how to utilize an incomplete and partially inaccurate model; how to identify what aspects of a problem to model and what rules to extract; and so on. We also expect to develop algorithms based on our data-and-model driven approach that are faster and produce better quality solutions on standard benchmarks, as compared to existing approaches that are solely model-based or data-driven.
+
+\paragraph{Broader Impacts} Automated planning and diagnosis have numerous applications beyond academia, and this project will develop algorithms that are faster, produce higher quality solutions, and are more broadly applicable. Our methods for integrating models and data may also carry over to tasks such as coordination of multi-agent systems and scheduling with their own applications. Finally, the project will involve training and supporting several graduate students in research.
+
+\end{document}
+
