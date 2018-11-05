@@ -46,7 +46,9 @@
 %\title{Learning Common Sense Rules Multi-Agent Reasoning with Common}
 %\title{Augmenting Model-based Approaches for Diagnosis, Planning, and Plan Recognition with Data}
 %\title{Diagnosis, Planning, and Plan Recognition with An Approximate Model and an Abundance of Data}
-\title{Data-and-Model Driven Reasoning}
+%\title{Data-and-Model Driven Reasoning}
+
+\title{Learning to Plan Safely}
 %\note{Need to shorten to 250 words}
 
 %\begin{center}
@@ -311,6 +313,122 @@ We propose to develop our data-and-model driven reasoning framework for two clas
 
 % What is the model in planning
 In planning, the task is to create a plan for an agent to follow in order to achieve a designated goal. A {\em model} in the planning context is any information the agent has about the current state and how its actions impact the world. For example, in classical planning~\cite{fikes1971strips}, a model includes a description of the pre-conditions and effects of each action given in PDDL (the Planning Domain Description Language)~\cite{mcdermott1998pddl}. In more involved planning models such as Markov Decision Processes (MDP) and Partially Observable MDPs, the model can also include transition and observation functions that capture knowledge about the stochastic nature of the world. We propose two different approaches to augmenting model-driven planning with data for our two settings below.
+
+
+[[OUT OF CONTEXT FOR NOW]]
+\subsection{Classical Planning with PAC Semantics}
+% What is the model in planning
+In planning, the task is to create a plan for an agent to follow in order to achieve a designated goal. A {\em model} in the planning context is any information the agent has about the current state and how its actions impact the world. In so-called classical planning~\cite{fikes1971strips}, a model is a description of the pre-conditions and effects of each action given in PDDL (the Planning Domain Description Language)~\cite{mcdermott1998pddl}. [[TODO: Give the formal definition]] 
+
+% What are observations in planning
+Observations in the context of planning are {\em trajectories} of actions performed by the agent to get from one state to another. These trajectories as sequences of the form $\tuple{ s_1, a_1, s_2, a_2, \ldots}$, where $s_i$ is a state, $a_i$ is the action performed when at state $s_i$, and $s_{i+1}$ is the state the agent has reached after performing action $a_i$ at state $s_i$. In a minimal sense, observing a trajectory simply reveals that it was possible to get from state $s_i$ to state $s_{i+1}$ by applying action $a_i$. % Maybe talk about partial observability?
+
+% What we want to achieve: create a plan that is guaranteed to work
+Prior work including a joint work by the PIs have studied how to learn a model of world through analysis of a given set of trajectories $\mathcal{T}=\{T_1,\ldots, T_n\}$. 
+We ask propose to explore the complementing question: what is possible to achieve with such a learned model?
+In more details, let $P$ be a set of planning tasks, 
+$D$ be a distribution over these tasks, 
+and the given set of trajectories $\mathcal{T}$ 
+was created by drawing problems from $P$ according to $D$ and solving them. Let $\hat{M}$ be an action model learned from analyzing $\mathcal{T}$ in some way, we ask: what it he probability that we can solve a problem drawn from $P$ according to $D$ using the learned model $\hat{M}$. 
+
+
+\subsubsection{Learning a Safe Action Model}
+% Focus #1: classical planning, safe plans
+We propose to begin our exploration of this topic by taking two simplifying assumptions: (1) the world follows some classical planning model, and (2) a planning task is achieved iff we can create a \emph{safe} plan for it, i.e., a plan that is guaranteed to work in the world, not just in $\hat{M}$. 
+We say that the model $\hat{M}$ is \emph{safe} if every plan consistent with this model is a safe plan. 
+
+
+A key difference between prior work on learning an action model 
+and the task of learning a safe action model corresponds to the difference between
+consistency-based diagnosis and abductive diagnosis. 
+Prior work searched for an action model that is consistent with the observed trajectories, 
+while in safe planning we search for a partial action model that must be true given the observed trajectories. In a high-level view, prior work looked for an action model $M$ such that $\mathcal{T}\wedge M\nvdash\bot$ 
+while in safe learning we look for a model $M$ such that $\mathcal{T}\vdash M$. 
+
+
+Recent joint work by the PIs proposed a method for learning a safe model for classical planning~\cite{stern2017efficientAndSafe}. This model was created as follows: 
+(1) a fact $f$ is a precondition of an action $a$ if that fact that was always true in all applications, 
+(2) a fact $f$ is a delete effect of an action $a$ is a fact 
+that in at least one invocation of $a$ it was in a pre-state and not in a post-state, and 
+(3) a fact $f$ is an add effect of an action $a$ is a fact 
+that in at least one invocation of $a$ it was not in a pre-state and was in a post-state. 
+
+
+% We only did preliminary stuff. What more on safe planning: lifted representation
+Surprisingly, the number of observations needed to learn a model that with probably higher ($1-\delta$) can solve most ($1-\epsilon$) problems is only [[todo: forgot how much it was]] in the number of actions. However, in that preliminary work, only grounded actions and facts were considered, and conditional effects were not allowed. [[explain grounded]] 
+The number of grounded actions for a given lifted action is exponential in the number of parameters of that action. For example, in the \emph{gripper} domain from the International Planning Competition (IPC), robotic arms (the grippers) are tasked to move balls between rooms. [[Roni: I attached the PDDL file for gripper to this overleaf project for us to help make concrete examples]]
+There is an action \emph{(pick ?obj ?room ?gripper)}, where its parameters are
+an object to pickup (?obj), the room where that object is at (?room), and the gripper that is supposed to pick up that object. The traces, however, will only show the grounded action, e.g., 
+\emph{(pick ball1 room2 gripper3)}, indicating that gripper3 picks up ball1 from room2. 
+Following our safe learning algorithm, initially all facts in the pre-state of that action 
+are considered preconditions of \emph{(pick ball1 room2 gripper3)}, 
+and we have no knowledge about the lifted action \emph{(pick ?obj ?room ?gripper)}. 
+However, after observing several other groundings of this lifted actions, further inference is possible. 
+In particular, whenever a grounded fact $f$ has a parameter that is of the same type
+as a parameter in the grounded actions header [[todo: define action header]]
+this means that either that it has to be the same object, or it has to be a different object, or it can be both.\footnote{Note that we assume, as was done in [todo: add refs], that all actions are lifted. That is, there are no actions that depend on a specific object, just on specific types of objects. For example, there is no precondition or effect of the lifted action pick that refer to a specific ball.}  
+
+[[TODO: Formalize this]]
+This inference can be done as a post-processing over the learned safe action model. 
+That is, first apply the safe learning algorithms described above, considering only the grounded representation of actions and facts. Then, group learned action models that correspond to the same lifted action to create a possibly partial model of the lifted action. 
+To be safe, we will assume the most restrictive version of relation between objects of the same type. 
+That is, if in all grounded action an object of type $t$ that appeared in the pre-condition 
+also appeared as an effect then it will be assumed that they must be the same object. 
+Conversly, if a different object appeared, then we will assume that it must be different. 
+Only if both cases have been observed, will we assume that it does not matter. 
+[[Roni: too detailed for a proposal, I think]]
+
+
+In its basic form PDDL assume that objects of the same type are categorial, that is, they are not ordered in any way. However, extensions can allow for such a total or partial order between objects. 
+We intend to develop safe algorithms for learning action models that support this as well, 
+by adding $\{<, \leq, >, \geq\}$ to the set of possible relation between objects of the same type. 
+More expressive variants of PDDL can also be considered, such as where instead of objects of a type 
+there variables with a continuous domain. Learning a safe action model for such a case is not possible,
+unless some restrictions on the relation between variables are assumed. We will explore the feasible set of relation in this research. For example, limiting to a linear relation between variables can give rise to a feasible learning algorithm. 
+
+
+{\bf Conditional effects.} ... how to learn a safe model with conditional effects ....
+
+
+\subsubsection{Creating a $k$-safe plan from a partial action model}
+
+[[ (1) learnig a safe and an unsafe model. Then create a plan that is $k$-safe by compiling this to a classical planning problem. (2) learning an unsafe model, that can become safe with $k$ mistakes. Based on mistake bound theory]]
+
+\subsubsection{Partial Observability}
+Here, we explore non-stochastic partial observability. 
+Different forms: not observing some states between actions, 
+and not observing some actions between states
+and not observing both
+and observing partial states. All are cool topics to explore.
+
+\subsection{Stochastic Planning}
+Hmm. 
+
+
+
+
+
+%What more on safe planning: lifted representation: ordinal and numeric
+
+
+
+if the given set of trajectories are selected from the same distribution as th
+Ways to advance this:
+(1) consider conditional effects
+(2) consider partial observability
+
+For epsilon-safe planning:
+- The same as above, but remove a precondition if it is a fact that is usually true (e.g., apply a tf-idf reasoning)
+- [[can we do something with effects??]]
+- [[can we have different confidence bounds for different actons, depending on how often we observed them?]]
+
+
+
+
+A model of an action $a$ in STRIPS is defined by a tuple $\tuple{\pre(a), \eff(a), c(a)}$, corresponding to the preconditions, effects, and cost of $a$, respectively. 
+
+[[END OUT OF CONTEXT FOR NOW]]
+
 
 \subsubsection{Data-and-Model Driven Planning With an Incomplete Model}
 % What are observations in planning

@@ -274,19 +274,101 @@ Bayesian networks have also been proposed as a model for performing diagnosis ta
 
 
 % Key setting: we have a model and observations
-We propose to develop our PAC-semantic based approach for two classical AI tasks: automated planning and automated diagnosis (DX). %In this approach, two types of data are given as input: a {\em model} and a set of {\em observations}. The model represents some prior knowledge about the rules that govern the behavior of the world and the observations represents data collected about some  interactions with the world in the past. 
-%In each of these tasks, we consider settings where two types of data are given as input: a {\em model} and a set of {\em observations}. The model represents some prior knowledge about the rules that govern the behavior of the world and the observations represents data collected about some  interactions with the world in the past. 
-
-%In some sense, the observations represents some knowledge about {\em how the world behaved in the past} and the model also represents knowledge about {\em how the world is expected to behave in the future}. What exactly does these model and observations comprise depends on the reasoning task at hand. 
-
-%In the proposed research we focus on reasoning for two classical AI tasks: planning and diagnosis. In each of these tasks, we consider settings where two types of data are given as input: a {\em model} and a set of {\em observations}. The model represents some prior knowledge about the rules that govern the behavior of the world and the observations represents data collected about some  interactions with the world in the past. 
-%In some sense, the observations represents some knowledge about {\em how the world behaved in the past} and the model also represents knowledge about {\em how the world is expected to behave in the future}. What exactly does these model and observations comprise depends on the reasoning task at hand. 
+We propose to develop our PAC-semantic based approach for two classical AI tasks: automated planning and automated diagnosis (DX).
 
 
+\subsection{Classical Planning with PAC Semantics}
+% What is the model in planning
+In planning, the task is to create a plan for an agent to follow in order to achieve a designated goal. A {\em model} in the planning context is any information the agent has about the current state and how its actions impact the world. In so-called classical planning~\cite{fikes1971strips}, a model is a description of the pre-conditions and effects of each action given in PDDL (the Planning Domain Description Language)~\cite{mcdermott1998pddl}. [[TODO: Give the formal definition]] 
+
+% What are observations in planning
+Observations in the context of planning are {\em trajectories} of actions performed by the agent to get from one state to another. These trajectories as sequences of the form $\tuple{ s_1, a_1, s_2, a_2, \ldots}$, where $s_i$ is a state, $a_i$ is the action performed when at state $s_i$, and $s_{i+1}$ is the state the agent has reached after performing action $a_i$ at state $s_i$. In a minimal sense, observing a trajectory simply reveals that it was possible to get from state $s_i$ to state $s_{i+1}$ by applying action $a_i$. % Maybe talk about partial observability?
+
+% What we want to achieve: create a plan that is guaranteed to work
+Prior work including a joint work by the PIs have studied how to learn a model of world through analysis of a given set of trajectories $\mathcal{T}=\{T_1,\ldots, T_n\}$. 
+We ask propose to explore the complementing question: what is possible to achieve with such a learned model?
+In more details, let $P$ be a set of planning tasks, 
+$D$ be a distribution over these tasks, 
+and the given set of trajectories $\mathcal{T}$ 
+was created by drawing problems from $P$ according to $D$ and solving them. Let $\hat{M}$ be an action model learned from analyzing $\mathcal{T}$ in some way, we ask: what it he probability that we can solve a problem drawn from $P$ according to $D$ using the learned model $\hat{M}$. 
+
+% Focus #1: classical planning, safe plans
+We propose to begin our exploration of this topic by taking two simplifying assumptions: (1) the world follows some classical planning model, and (2) a planning task is achieved iff we can create a \emph{safe} plan for it, i.e., a plan that is guaranteed to work in the world, not just in $\hat{M}$. 
+We say that the model $\hat{M}$ is \emph{safe} if every plan consistent with this model is a safe plan. Recent joint work by the PIs proposed a method for learning a safe model for classical planning~\cite{stern2017efficientAndSafe}. This model was created as follows: 
+(1) a fact $f$ is a precondition of an action $a$ if that fact that was always true in all applications, 
+(2) a fact $f$ is a delete effect of an action $a$ is a fact 
+that in at least one invocation of $a$ it was in a pre-state and not in a post-state, and 
+(3) a fact $f$ is an add effect of an action $a$ is a fact 
+that in at least one invocation of $a$ it was not in a pre-state and was in a post-state. 
 
 
-%\subsection{Data-Augmented Planning with PAC Heuristic Search}
-%\subsection{Data-and-Model Driven Planning}
+% We only did preliminary stuff. What more on safe planning.
+Surprisingly, the number of observations needed to learn a model that with probably higher ($1-\delta$) can solve most ($1-\epsilon$) problems is only [[todo: forgot how much it was]] in the number of actions. However, in that preliminary work, only grounded actions and facts were considered, and conditional effects were not allowed. [[explain grounded]] 
+The number of grounded actions for a given lifted action is exponential in the number of parameters of that action. For example, in the \emph{gripper} domain from the International Planning Competition (IPC), robotic arms (the grippers) are tasked to move balls between rooms. 
+There is a \emph{pick-up} 
+
+from one room to the other. 
+Thus, the action 
+
+
+a mobile agent in a large map will have a \emph{move(
+In the proposed research, we intend to go further and develop algorithms for learning a safe action model 
+
+
+establish the limits of safe planning for action models that are defined in a liftedmore compact and expressive with a richer expressive
+
+
+if the given set of trajectories are selected from the same distribution as th
+Ways to advance this:
+(1) consider conditional effects
+(2) consider partial observability
+
+For epsilon-safe planning:
+- The same as above, but remove a precondition if it is a fact that is usually true (e.g., apply a tf-idf reasoning)
+- [[can we do something with effects??]]
+- [[can we have different confidence bounds for different actons, depending on how often we observed them?]]
+
+
+
+
+A model of an action $a$ in STRIPS is defined by a tuple $\tuple{\pre(a), \eff(a), c(a)}$, corresponding to the preconditions, effects, and cost of $a$, respectively. 
+
+
+The corresponding error value $err(a)$ gives a lower bound on the probability that (1) $a$ is applicable when $\pre(a)$ holds, (2) applying $a$ will have cause the effects in $\eff(a)$, and (3) the cost of applying $a$ is $c(a)$. 
+
+
+
+
+The notion of \emph{safe} plan was recently introduced by the PIs along with an algorithm for create a partial model $M_{safe}$ that u
+
+we only consider \emph{safe} plans, i.e., that are guaranteed to be executable. 
+
+a classical planning model 
+
+two simplying
+, can we characterize the space of possible plans taht  
+
+
+
+\subsection{Conformant Planning with PAC Semantics}
+
+
+
+\subsection{Contingent Planning with PAC Semantics}
+
+
+
+\subsection{Planning with PAC Semantics for Markovian Models}
+
+In more involved planning models such as Markov Decision Processes (MDP) and Partially Observable MDPs, the model can also include the transition and observation functions that capture knowledge about the stochastic nature of the world. 
+
+
+\subsection{Multi-Agent Planning with PAC Semantics}
+
+
+
+
+
 \subsection{Data-and-Model Driven Planning}
 
 % What is the model in planning
