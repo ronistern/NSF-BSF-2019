@@ -1,0 +1,55 @@
+
+Conformant model-free planning:
+==============================
+
+Safe planning in classical planning:
+(1) a fact $f$ is a precondition of an action $a$ if that fact that was always true in all applications, 
+(2) a fact $f$ is a delete effect of an action $a$ is a fact 
+that in at least one invocation of $a$ it was in a pre-state and not in a post-state, and 
+(3) a fact $f$ is an add effect of an action $a$ is a fact 
+that in at least one invocation of $a$ it was not in a pre-state and was in a post-state. 
+
+Ways to advance this:
+(1) consider conditional effects
+(2) consider partial observability
+
+For epsilon-safe planning:
+- The same as above, but remove a precondition if it is a fact that is usually true (e.g., apply a tf-idf reasoning)
+- [[can we do something with effects??]]
+- [[can we have different confidence bounds for different actons, depending on how often we observed them?]]
+
+
+Tunable learning:
+Existing methods for learning planning models compile to SAT and look for the best model that is consistent with the observations.
+We can adapt these methods so that we define a-priori weights to false positives and false negatives when construction the model.
+
+More expressive models:
+(1) lifted representation but only with categorial objects
+That means the operator on arguments can be
+equality or inequality only. So, we have a limited number of options, and we can apply the same statistical reasoning we did so far:
+if our lifted action model is true in all the observations so far, then it is likely to be true in the common future settings. 
+
+(2) Lifted representation with objects with an order
+This added less/greater than. 
+Still no so bad
+
+(3) Lifted representation with numerical objects, but only linear functions
+....
+
+
+Contingent model-free planning
+================================== 
+The same, but we have observation so we can construct a plan tree: try action X, if fail, do Y
+Need to watch out from dead-ends
+Raises the question of learning what cannot be an effect of an action. Is this any different?
+
+
+
+All the above but with probabilities over action outcomes (MDP)
+
+
+All the above but with probabilities over current state  (PO-MDP)
+
+
+
+
